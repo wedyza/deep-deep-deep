@@ -4,13 +4,9 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/aska.png</File>
     <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/ayanami.jpg</File>
-    <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/japan.jpg</File>
   </SourceFiles>
   <DestFiles>
-    <File xsi:nil="true" />
-    <File xsi:nil="true" />
     <File xsi:nil="true" />
   </DestFiles>
 </SourceFileCollection>

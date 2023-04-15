@@ -2,10 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\game",
-    "\\game\\bin",
-    "\\game\\bin\\Debug",
-    "\\game\\Content"
+    "\\game\\bin\\Debug"
   ],
-  "SelectedNode": "\\game\\game.csproj",
+  "SelectedNode": "\\game\\game.sln",
   "PreviewInSolutionExplorer": false
 }
