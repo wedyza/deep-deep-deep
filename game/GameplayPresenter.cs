@@ -26,6 +26,7 @@ namespace game
             _gameplayView.PlayerMoved += ViewModelMovePlayer;
             _gameplayModel.Updated += ModelViewUpdate;
 
+            _gameplayModel.Initialize();
         }
 
         private void ViewModelMovePlayer(object sender, ControlsEventArgs e)
@@ -35,12 +36,17 @@ namespace game
 
         private void ModelViewUpdate(object sender, GameplayEventArgs e)
         {
-            _gameplayView.LoadGameCycleParameters(e.PlayerPos);
+            _gameplayView.LoadGameCycleParameters(e.Objects);
         }
 
         private void ViewModelUpdate(object sender, EventArgs e)
         {
             _gameplayModel.Update();
+        }
+
+        public void LaunchGame()
+        {
+            _gameplayView.Run();
         }
     }
 }

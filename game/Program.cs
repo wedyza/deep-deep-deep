@@ -1,5 +1,5 @@
 ﻿using System;
-
+using game;
 namespace deep_deep_deep
 
 {
@@ -27,11 +27,10 @@ namespace deep_deep_deep
         static void Main()
 
         {
-
-            using (var game = new GameCycleView())
-
-                game.Run();
-
+            //using (var game = new GameCycleView())
+            //  game.Run();
+            GameplayPresenter g = new GameplayPresenter(new GameCycleView(), new GameCycle());
+            g.LaunchGame();
         }
 
     }
