@@ -36,3 +36,4 @@ C:\Users\wedyzza\Desktop\deep deep deep\game\obj\Debug\net6.0-windows\game.pdb
 C:\Users\wedyzza\Desktop\deep deep deep\game\obj\Debug\net6.0-windows\game.genruntimeconfig.cache
 C:\Users\wedyzza\Desktop\deep deep deep\game\obj\Debug\net6.0-windows\ref\game.dll
 C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\ayanami.xnb
+C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\wall.xnb

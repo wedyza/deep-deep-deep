@@ -18,7 +18,6 @@ namespace deep_deep_deep
         private Dictionary<int, IObject> _objects = new Dictionary<int, IObject>();
         private Dictionary<int, Texture2D> _textures = new Dictionary<int, Texture2D>();
 
-
         public GameCycleView()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -39,6 +38,7 @@ namespace deep_deep_deep
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _textures.Add(1, Content.Load<Texture2D>("ayanami"));
+            _textures.Add(2, Content.Load<Texture2D>("wall"));
         }
 
         public void LoadGameCycleParameters(Dictionary<int, IObject> objects)
