@@ -37,8 +37,8 @@ namespace deep_deep_deep
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _textures.Add(1, Content.Load<Texture2D>("ayanami"));
-            _textures.Add(2, Content.Load<Texture2D>("wall"));
+            _textures.Add((byte)GameCycle.ObjectTypes.player, Content.Load<Texture2D>("ayanami"));
+            _textures.Add((byte)GameCycle.ObjectTypes.wall, Content.Load<Texture2D>("wall"));
         }
 
         public void LoadGameCycleParameters(Dictionary<int, IObject> objects)
@@ -49,6 +49,7 @@ namespace deep_deep_deep
         protected override void Update(GameTime gameTime)
         {
             var keys = Keyboard.GetState().GetPressedKeys();
+            
             if (keys.Length > 0)
             {
                 var k = keys[0];
@@ -73,7 +74,7 @@ namespace deep_deep_deep
                             PlayerMoved.Invoke(
                                 this,
                                 new ControlsEventArgs { Direction = IGameplayModel.Direction.left }
-                                );break;
+                                ); break;
                         }
                     case Keys.D:
                         {

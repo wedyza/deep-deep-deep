@@ -20,6 +20,12 @@ namespace game
         public Dictionary<int, IObject> Objects { get; set; }
 
 
+        public enum ObjectTypes : byte
+        {
+            player,
+            wall
+        }
+
 
         public void Initialize()
         {
@@ -36,27 +42,31 @@ namespace game
                     if (_map[x, y] != '\0')
                     {
                         IObject generatedObject = GenerateObject(_map[x, y], x, y);
+                        if (_map[x,y] == 'P' && !isPlacedPlayer)
+                        {
+                            PlayerId = _currentID;
+                            isPlacedPlayer = true;
+                        }
                         Objects.Add(_currentID, generatedObject);
                         _currentID++;
                     }
                 }
-            PlayerId = 1;
         }
 
 
-        private Player CreateNPC(float x, float y, int spriteId, Vector2 speed)
+        private Player CreateNPC(float x, float y, ObjectTypes spriteId, Vector2 speed)
         {
             Player obj = new Player();
-            obj.ImageID = spriteId;
+            obj.ImageID = (byte)spriteId;
             obj.Pos = new Vector2(x, y);
             obj.Speed = speed;
             return obj;
         }
 
-        private Wall CreateWall(float x, float y, int spriteId)
+        private Wall CreateWall(float x, float y, ObjectTypes spriteId)
         {
             Wall w = new Wall();
-            w.ImageID = spriteId;
+            w.ImageID = (byte)spriteId;
             w.Pos = new Vector2(x, y);
             return w;
         }
@@ -67,9 +77,9 @@ namespace game
             float y = yTile * _tileSize;
             IObject generatedObject = null;
             if (sign == 'O' || sign == 'P')
-                generatedObject = CreateNPC(x + _tileSize / 2 - 38, y + _tileSize / 2 - 50, 1, new Vector2(0, 0));
+                generatedObject = CreateNPC(x + _tileSize / 2 - 38, y + _tileSize / 2 - 50, ObjectTypes.player, new Vector2(0, 0));
             else if (sign == 'W')
-                generatedObject = CreateWall(x + _tileSize / 2 - 12, y + _tileSize / 2 - 50, 2);
+                generatedObject = CreateWall(x + _tileSize / 2 - 12, y + _tileSize / 2 - 50, ObjectTypes.wall);
             return generatedObject;
         }
 
@@ -92,6 +102,8 @@ namespace game
         {
             foreach(var obj in Objects.Values)
             {
+                if (obj is Player)
+                    obj.MoveCollider();
                 obj.Update();
             }
             Updated.Invoke(this, new GameplayEventArgs { Objects = this.Objects });
@@ -99,12 +111,14 @@ namespace game
 
         public void MovePlayer(IGameplayModel.Direction dir)
         {
+            Console.WriteLine(PlayerId);
             Player p = (Player)Objects[PlayerId];
+            Console.WriteLine(p);
             switch (dir)
             {
                 case IGameplayModel.Direction.forward:
                     {
-                        p.Speed+= new Vector2(0, -1);
+                        p.Speed += new Vector2(0, -1);
                         break;
                     }
                 case IGameplayModel.Direction.backward:
