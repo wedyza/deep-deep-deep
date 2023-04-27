@@ -4,13 +4,14 @@ using System;
 namespace game
 {
     class Player : IObject, ISolid
+
     {
         public int ImageID { get; set; }
         public Vector2 Pos { get; set; }
         public Vector2 Speed { get; set; }
         public RectangleCollider Collider { get; set; }
 
-        public Car(Vector2 position)
+        public Player(Vector2 position)
         {
             Pos = position;
             Collider = new RectangleCollider((int)Pos.X, (int)Pos.Y, 200, 200);
@@ -23,7 +24,7 @@ namespace game
 
         public void MoveCollider(Vector2 newPos)
         {
-            Collider.Boundary.Offset(newPos);
+            Collider = new RectangleCollider((int)Pos.X, (int)Pos.Y, 200, 200);
         }
     }
 
@@ -31,6 +32,7 @@ namespace game
     {
         public int ImageID { get; set;}
         public Vector2 Pos { get; set; }
+        public Vector2 Speed { get; set; }
 
         public void Update()
         {

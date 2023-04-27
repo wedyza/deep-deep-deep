@@ -12,6 +12,8 @@ namespace game
 
         Vector2 Pos { get; set; }
 
+        Vector2 Speed { get; set; }
+
         void Update();
     }
 }

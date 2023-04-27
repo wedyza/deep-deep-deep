@@ -32,7 +32,7 @@ namespace game
             Objects = new Dictionary<int, IObject>();
             _currentID = 1;
             _map[5, 6] = 'P';
-            _map[4, 4] = 'O';
+            _map[9, 4] = 'O';
             _map[15, 6] = 'O';
             createWallsOnEdges();
             bool isPlacedPlayer = false;
@@ -56,9 +56,8 @@ namespace game
 
         private Player CreateNPC(float x, float y, ObjectTypes spriteId, Vector2 speed)
         {
-            Player obj = new Player();
+            Player obj = new Player(new Vector2(x, y));
             obj.ImageID = (byte)spriteId;
-            obj.Pos = new Vector2(x, y);
             obj.Speed = speed;
             return obj;
         }
@@ -100,11 +99,23 @@ namespace game
 
         public void Update()
         {
-            foreach(var obj in Objects.Values)
+            for (int i = 1; i <= Objects.Keys.Count; i++)
             {
-                if (obj is Player)
-                    obj.MoveCollider();
-                obj.Update();
+                Objects[i].Update();
+                if (Objects[i] is Player p1)
+                {
+                    for (int j = i+1; j <= Objects.Keys.Count; j++)
+                    {
+                        if (Objects[j] is ISolid p2)
+                        {
+                            if (RectangleCollider.IsCollided(p1.Collider, p2.Collider))
+                            {
+                                Objects[i].Speed = new Vector2(0, 0);
+                                Objects[j].Speed = new Vector2(0, 0);
+                            }
+                        }
+                    }
+                }
             }
             Updated.Invoke(this, new GameplayEventArgs { Objects = this.Objects });
         }
