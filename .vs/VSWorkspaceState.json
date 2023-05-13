@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\game",
-    "\\game\\bin\\Debug"
+    "\\game\\bin",
+    "\\not connected with game"
   ],
-  "SelectedNode": "\\game\\game.sln",
+  "SelectedNode": "\\game\\bin",
   "PreviewInSolutionExplorer": false
 }
