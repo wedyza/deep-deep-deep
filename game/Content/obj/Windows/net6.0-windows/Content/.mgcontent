@@ -4,9 +4,11 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/ayanami.jpg</File>
+    <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/wallx4.png</File>
+    <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/wizardx4.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
   </DestFiles>
 </SourceFileCollection>

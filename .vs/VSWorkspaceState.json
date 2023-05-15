@@ -2,9 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\game",
-    "\\game\\bin",
+    "\\game\\Content",
     "\\not connected with game"
   ],
-  "SelectedNode": "\\game\\bin",
+  "SelectedNode": "\\game\\Content\\Content.mgcb",
   "PreviewInSolutionExplorer": false
 }
