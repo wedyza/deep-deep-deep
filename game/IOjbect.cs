@@ -22,5 +22,6 @@ namespace game
 
         void Update();
         
+        bool IsRemoved { get; set; }
     }
 }

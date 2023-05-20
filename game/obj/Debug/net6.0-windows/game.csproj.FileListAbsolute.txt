@@ -37,3 +37,5 @@ C:\Users\wedyzza\Desktop\deep deep deep\game\obj\Debug\net6.0-windows\game.genru
 C:\Users\wedyzza\Desktop\deep deep deep\game\obj\Debug\net6.0-windows\ref\game.dll
 C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\wizardx4.xnb
 C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\wallx4.xnb
+C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\doorx4.xnb
+C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\firex2.xnb

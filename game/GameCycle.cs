@@ -23,9 +23,46 @@ namespace game
         public enum ObjectTypes : byte
         {
             player,
-            wall
+            wall,
+            door,
+            fire,
+            ice,
+            arrow,
+            fire_arrow,
+            attack,
+            long_attack
         }
 
+
+        public void PlayerAttack(IGameplayModel.Direction dir)
+        {
+            Player p = (Player)Objects[PlayerId];
+            var spell = p.ActiveSpell.Clone() as IObject;
+            if (dir == IGameplayModel.Direction.right)
+            {
+                spell.Speed = new Vector2(35, 0);
+                spell.Move(new Vector2(p.Pos.X + 128, p.Pos.Y + 32));
+                
+            }
+            else if (dir == IGameplayModel.Direction.left)
+            {
+                spell.Speed = new Vector2(-35, 0);
+                spell.Move(new Vector2(p.Pos.X - 64, p.Pos.Y + 32));
+            }
+            else if (dir == IGameplayModel.Direction.forward)
+            {
+                spell.Speed = new Vector2(0, -35);
+                spell.Move(new Vector2(p.Pos.X + 32, p.Pos.Y - 64));
+            }
+            else if (dir == IGameplayModel.Direction.backward)
+            {
+                spell.Speed = new Vector2(0, 35);
+                spell.Move(new Vector2(p.Pos.X+32, p.Pos.Y + 128));
+            }
+            spell.dir = dir;
+            Objects.Add(_currentID, spell);
+            _currentID++;
+        }
 
         public void Initialize()
         {
@@ -33,27 +70,33 @@ namespace game
             _currentID = 1;
             _map[5, 4] = 'P';
             _map[9, 4] = 'O';
-            _map[14, 6] = 'O';
             createWallsOnEdges();
+            _map[7, 0] = 'D';
             bool isPlacedPlayer = false;
             for (int y = 0; y < _map.GetLength(1); y++)
-            for (int x = 0; x < _map.GetLength(0); x++)
-            {
-                if (_map[x, y] != '\0')
+                for (int x = 0; x < _map.GetLength(0); x++)
                 {
-                    IObject generatedObject = GenerateObject(_map[x, y], x, y);
-                    if (_map[x, y] == 'P' && !isPlacedPlayer)
+                    if (_map[x, y] != '\0')
                     {
-                        PlayerId = _currentID;
-                        isPlacedPlayer = true;
+                        IObject generatedObject = GenerateObject(_map[x, y], x, y);
+                        if (_map[x, y] == 'P' && !isPlacedPlayer)
+                        {
+                            PlayerId = _currentID;
+                            isPlacedPlayer = true;
+                        }
+
+                        Objects.Add(_currentID, generatedObject);
+                        _currentID++;
                     }
-
-                    Objects.Add(_currentID, generatedObject);
-                    _currentID++;
                 }
-            }
         }
-
+        
+        private Door CreateDoor(float x, float y, ObjectTypes spriteId)
+        {
+            Door obj = new Door(new Vector2(x, y));
+            obj.ImageID = (byte)spriteId;
+            return obj;
+        }
 
         private Player CreateNPC(float x, float y, ObjectTypes spriteId, Vector2 speed)
         {
@@ -79,6 +122,8 @@ namespace game
                 generatedObject = CreateNPC(x, y, ObjectTypes.player, new Vector2(0, 0));
             else if (sign == 'W')
                 generatedObject = CreateWall(x, y, ObjectTypes.wall);
+            else if (sign == 'D')
+                generatedObject = CreateDoor(x, y, ObjectTypes.door);
             return generatedObject;
         }
 
@@ -99,8 +144,6 @@ namespace game
 
         public void Update()
         {
-            var playerInitPos = Objects[PlayerId].Pos;
-            var collisionObjects = new Dictionary<int, Vector2>();
             for (int i = 1; i <= Objects.Keys.Count; i++)
             {
                 var objInitPos = Objects[i].Pos;
@@ -113,13 +156,17 @@ namespace game
                             continue;
                         if (Objects[j] is ISolid p2)
                         {
-                            bool IsCollided = false;
                             while (RectangleCollider.IsCollided(p1.Collider, p2.Collider))
                             {
+                                if (Objects[i] is ISpell)
+                                {
+                                    Objects.Remove(i);
+                                    _currentID--;
+                                    break;
+                                }
                                 var oppositeDir = Objects[i].Pos - objInitPos;
                                 oppositeDir.Normalize();
                                 Objects[i].Move(Objects[i].Pos - oppositeDir);
-                                p1.MoveCollider(Objects[i].Pos);
                             }
                         }
                     }
@@ -132,14 +179,21 @@ namespace game
         public void MovePlayer(IGameplayModel.Direction dir)
         {
             Player p = (Player)Objects[PlayerId];
-            if (dir == IGameplayModel.Direction.forward)
-                p.Speed += new Vector2(0, -5);
-            if (dir == IGameplayModel.Direction.backward)
-                p.Speed += new Vector2(0, 5);
-            if (dir == IGameplayModel.Direction.left)
-                p.Speed += new Vector2(-5, 0);
-            if (dir == IGameplayModel.Direction.right)
-                p.Speed += new Vector2(5, 0);
+            switch (dir)
+            {
+                case IGameplayModel.Direction.forward:
+                    p.Speed += new Vector2(0, -3);
+                    break;
+                case IGameplayModel.Direction.backward:
+                    p.Speed += new Vector2(0, 3);
+                    break;
+                case IGameplayModel.Direction.left:
+                    p.Speed += new Vector2(-3, 0);
+                    break;
+                case IGameplayModel.Direction.right:
+                    p.Speed += new Vector2(3, 0);
+                    break;
+            }
         }
 
         private void CalculateObstacleCollision(

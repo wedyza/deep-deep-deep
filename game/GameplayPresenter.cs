@@ -24,11 +24,17 @@ namespace game
 
             _gameplayView.CycleFinished += ViewModelUpdate;
             _gameplayView.PlayerMoved += ViewModelMovePlayer;
+            _gameplayView.PlayerAttacked += ViewModelPlayerAttack;
             _gameplayModel.Updated += ModelViewUpdate;
-
+            
             _gameplayModel.Initialize();
         }
 
+        private void ViewModelPlayerAttack(object sender, ControlsEventArgs e)
+        {
+            _gameplayModel.PlayerAttack(e.Direction);
+        }
+        
         private void ViewModelMovePlayer(object sender, ControlsEventArgs e)
         {
             _gameplayModel.MovePlayer(e.Direction);

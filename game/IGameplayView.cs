@@ -13,6 +13,7 @@ namespace game
     {
         event EventHandler CycleFinished;
         event EventHandler<ControlsEventArgs> PlayerMoved;
+        event EventHandler<ControlsEventArgs> PlayerAttacked; 
 
         void LoadGameCycleParameters(Dictionary<int, IObject> objects);
         void Run();

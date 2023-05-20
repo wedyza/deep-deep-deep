@@ -7,6 +7,12 @@ namespace game
     class Player : IObject, ISolid
 
     {
+        public ISpell QSpell;
+        public ISpell WSpell;
+        public ISpell ActiveSpell;
+
+        private int HP { get; set; }
+        
         public Vector2 _speed;
         public int ImageID { get; set; }
         public IGameplayModel.Direction dir { get; set; }
@@ -37,15 +43,21 @@ namespace game
 
         public Player(Vector2 position)
         {
+            HP = 100;
+            QSpell = new Fire();
+            WSpell = new Ice();
+            ActiveSpell = QSpell;
             dir = IGameplayModel.Direction.right;
             Pos = position;
             Collider = new RectangleCollider((int)Pos.X, (int)Pos.Y, 128, 128);
             Enemy = false;
+            IsRemoved = false;
         }
 
         public void Move(Vector2 pos)
         {
             Pos = pos;
+            MoveCollider(Pos);
         }
 
         public void Update()
@@ -59,9 +71,43 @@ namespace game
                 dir = IGameplayModel.Direction.left;
         }
 
+        public bool IsRemoved { get; set; }
+
         public void MoveCollider(Vector2 newPos)
         {
             Collider = new RectangleCollider((int)Pos.X, (int)Pos.Y, 128, 128);
+        }
+    }
+
+    class Door : IObject, ISolid
+    {
+        public int ImageID { get; set; }
+        public IGameplayModel.Direction dir { get; set; }
+        public Vector2 Pos { get; }
+        public bool Enemy { get; }
+        public Vector2 Speed { get; set; }
+
+        public Door(Vector2 postion)
+        {
+            Pos = postion;
+            dir = IGameplayModel.Direction.right;
+            Enemy = false;
+            Collider = new RectangleCollider((int)Pos.X, (int)Pos.Y, 128, 128);
+            IsRemoved = false;
+        }
+        public void Move(Vector2 pos)
+        {
+        }
+
+        public void Update()
+        {
+        }
+
+        public bool IsRemoved { get; set; }
+
+        public RectangleCollider Collider { get; set; }
+        public void MoveCollider(Vector2 newPos)
+        {
         }
     }
 
@@ -76,6 +122,7 @@ namespace game
 
         public Wall(Vector2 position)
         {
+            IsRemoved = false;
             dir = IGameplayModel.Direction.right;
             Pos = position;
             Collider = new RectangleCollider((int)Pos.X, (int)Pos.Y, 128, 128);
@@ -83,17 +130,16 @@ namespace game
         }
         public void MoveCollider(Vector2 newPos)
         {
-            throw new NotImplementedException();
         }
 
         public void Move(Vector2 pos)
         {
-            throw new NotImplementedException();
         }
 
         public void Update()
         {
-
         }
+
+        public bool IsRemoved { get; set; }
     }
 }
