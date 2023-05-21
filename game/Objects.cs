@@ -142,4 +142,44 @@ namespace game
 
         public bool IsRemoved { get; set; }
     }
+
+    class Goblin : IObject, ISolid
+    {
+        public int HP = 100;
+
+        public ISpell attack;
+        
+        public int ImageID { get; set; }
+        public IGameplayModel.Direction dir { get; set; }
+        public Vector2 Pos { get; private set; }
+        public bool Enemy { get; }
+        public Vector2 Speed { get; set; }
+
+        public Goblin(Vector2 position)
+        {
+            HP = 100;
+            Enemy = true;
+            Pos = position;
+            IsRemoved = false;
+            attack = new Attack();
+        }
+        
+        public void Move(Vector2 pos)
+        {
+            Pos = pos;
+        }
+
+        public void Update()
+        {
+            Pos += Speed;
+            MoveCollider(Pos);
+        }
+
+        public bool IsRemoved { get; set; }
+        public RectangleCollider Collider { get; set; }
+        public void MoveCollider(Vector2 newPos)
+        {
+            Collider = new RectangleCollider((int)Pos.X, (int)Pos.Y, 128, 128);
+        }
+    }
 }

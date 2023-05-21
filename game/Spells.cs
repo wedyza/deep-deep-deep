@@ -102,3 +102,49 @@ public class Ice : ISpell, ISolid, IObject
         Collider = new RectangleCollider((int)newPos.X, (int)newPos.Y, 64, 64);
     }
 }
+
+public class Attack : ISpell, ISolid, IObject
+{
+    public object Clone()
+    {
+        return this.MemberwiseClone();
+    }
+
+    public ISpell.DamageType _damageType { get; set; }
+    public int DamageDeals { get; set; }
+
+    public Attack()
+    {
+        _damageType = ISpell.DamageType.physical;
+        DamageDeals = 35;
+        Enemy = false;
+        
+    }
+    public T SpecialEffect<T>(T x)
+    {
+        return x;
+    }
+
+    public RectangleCollider Collider { get; set; }
+    public void MoveCollider(Vector2 newPos)
+    {
+        Collider = new RectangleCollider((int)Pos.X, (int)Pos.Y, 64, 64);
+    }
+
+    public int ImageID { get; set; }
+    public IGameplayModel.Direction dir { get; set; }
+    public Vector2 Pos { get; private set; }
+    public bool Enemy { get; }
+    public Vector2 Speed { get; set; }
+    public void Move(Vector2 pos)
+    {
+        Pos = pos;
+        MoveCollider(Pos);
+    }
+
+    public void Update()
+    {
+    }
+
+    public bool IsRemoved { get; set; }
+}
