@@ -13,12 +13,12 @@ namespace game
 
         private int _tileSize = 128;
         private char[,] _map = new char[15, 9];
-
+        
+        
         public int _currentID;
 
         public int PlayerId { get; set; }
         public Dictionary<int, IObject> Objects { get; set; }
-
 
         public enum ObjectTypes : byte
         {
@@ -30,7 +30,10 @@ namespace game
             arrow,
             fire_arrow,
             attack,
-            long_attack
+            long_attack, 
+            goblin, 
+            skeleton,
+            gremyt
         }
 
 
@@ -64,12 +67,16 @@ namespace game
             _currentID++;
         }
 
+        public void ResetGame()
+        {
+        }
+
         public void Initialize()
         {
             Objects = new Dictionary<int, IObject>();
             _currentID = 1;
             _map[5, 4] = 'P';
-            _map[9, 4] = 'O';
+            _map[9, 4] = 'G';
             createWallsOnEdges();
             _map[7, 0] = 'D';
             bool isPlacedPlayer = false;
@@ -90,6 +97,13 @@ namespace game
                     }
                 }
         }
+
+        private Goblin CreateGoblin(float x, float y, ObjectTypes spriteId)
+        {
+            Goblin obj = new Goblin(new Vector2(x, y));
+            obj.ImageID = (byte)spriteId;
+            return obj;
+        }
         
         private Door CreateDoor(float x, float y, ObjectTypes spriteId)
         {
@@ -105,7 +119,7 @@ namespace game
             obj.Speed = speed;
             return obj;
         }
-
+        
         private Wall CreateWall(float x, float y, ObjectTypes spriteId)
         {
             Wall w = new Wall(new Vector2(x, y));
@@ -124,6 +138,8 @@ namespace game
                 generatedObject = CreateWall(x, y, ObjectTypes.wall);
             else if (sign == 'D')
                 generatedObject = CreateDoor(x, y, ObjectTypes.door);
+            else if (sign == 'G')
+                generatedObject = CreateGoblin(x, y, ObjectTypes.goblin);
             return generatedObject;
         }
 
@@ -169,6 +185,9 @@ namespace game
                                 Objects[i].Move(Objects[i].Pos - oppositeDir);
                             }
                         }
+
+                        if (!Objects.ContainsKey(i))
+                            break;
                     }
                 }
             }

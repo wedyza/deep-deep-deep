@@ -162,6 +162,7 @@ namespace game
             Pos = position;
             IsRemoved = false;
             attack = new Attack();
+            dir = IGameplayModel.Direction.right;
         }
         
         public void Move(Vector2 pos)
@@ -173,13 +174,17 @@ namespace game
         {
             Pos += Speed;
             MoveCollider(Pos);
+            if (Speed.X >= 0)
+                dir = IGameplayModel.Direction.right;
+            else
+                dir = IGameplayModel.Direction.left;
         }
 
         public bool IsRemoved { get; set; }
         public RectangleCollider Collider { get; set; }
         public void MoveCollider(Vector2 newPos)
         {
-            Collider = new RectangleCollider((int)Pos.X, (int)Pos.Y, 128, 128);
+            Collider = new RectangleCollider((int)newPos.X, (int)newPos.Y, 128, 128);
         }
     }
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/wallx4.png</SourceFile>
-  <SourceTime>2023-05-15T20:36:46+05:00</SourceTime>
-  <DestFile>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/bin/Windows/wallx4.xnb</DestFile>
-  <DestTime>2023-05-26T17:21:59.6832713+05:00</DestTime>
+  <SourceFile>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/goblinx4z.png</SourceFile>
+  <SourceTime>2023-05-23T19:34:18+05:00</SourceTime>
+  <DestFile>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/bin/Windows/goblinx4z.xnb</DestFile>
+  <DestTime>2023-05-26T17:21:59.6760775+05:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2022-07-26T16:44:56+05:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

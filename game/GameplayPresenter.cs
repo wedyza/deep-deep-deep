@@ -26,10 +26,16 @@ namespace game
             _gameplayView.PlayerMoved += ViewModelMovePlayer;
             _gameplayView.PlayerAttacked += ViewModelPlayerAttack;
             _gameplayModel.Updated += ModelViewUpdate;
+            _gameplayView.GameReseted += ResetGame;
             
             _gameplayModel.Initialize();
         }
 
+        private void ResetGame(object sender, EventArgs e)
+        {
+            _gameplayModel.Initialize();
+        }
+        
         private void ViewModelPlayerAttack(object sender, ControlsEventArgs e)
         {
             _gameplayModel.PlayerAttack(e.Direction);

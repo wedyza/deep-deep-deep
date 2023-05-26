@@ -16,6 +16,7 @@ namespace game
         void Update();
         void MovePlayer(Direction dir);
         void PlayerAttack(Direction dir);
+        void ResetGame();
         void Initialize();
 
         public enum Direction : byte
