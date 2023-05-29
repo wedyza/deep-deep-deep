@@ -8,13 +8,13 @@ namespace game
 {
     public interface IObject
     {
+        int HP { get; set; }
+        
         int ImageID { get; set; }
 
         IGameplayModel.Direction dir { get; set; }
 
         Vector2 Pos { get; }
-        
-        bool Enemy { get; }
 
         Vector2 Speed { get; set; }
 

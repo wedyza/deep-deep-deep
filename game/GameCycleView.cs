@@ -12,13 +12,24 @@ namespace deep_deep_deep
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private GameState _gameState;
+        private GameState _actualGameState;
         private double cooldownTime;
         
         public event EventHandler CycleFinished = delegate { };
         public event EventHandler<ControlsEventArgs> PlayerMoved = delegate { };
         public event EventHandler<ControlsEventArgs> PlayerAttacked = delegate {  };
-        public event EventHandler GameReseted = delegate {  }; 
+        public event EventHandler GameReseted = delegate {  };
+        public GameState ActualGameState 
+        {
+            get
+            {
+                return _actualGameState;
+            }
+            set
+            {
+                _actualGameState = value;
+            }
+        }
 
         private KeyboardState _currentKey;
         private KeyboardState _previousKey;
@@ -37,8 +48,7 @@ namespace deep_deep_deep
         protected override void Initialize()
         {
             base.Initialize();
-            _gameState = GameState.Menu;
-            _graphics.IsFullScreen = true;
+            _actualGameState = GameState.Menu;
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1080;
             _graphics.ApplyChanges();
@@ -109,7 +119,7 @@ namespace deep_deep_deep
             _currentKey = Keyboard.GetState();
             if (keys.Length > 0)
             {
-                switch (_gameState)
+                switch (_actualGameState)
                 {
                     case GameState.Game:
                         foreach (var k in keys)
@@ -141,8 +151,7 @@ namespace deep_deep_deep
                                     );
                                     break;
                                 case Keys.Escape:
-                                    if (_gameState == GameState.Game)
-                                        _gameState = GameState.Menu;
+                                    _actualGameState = GameState.Menu;
                                     break;
                             }
 
@@ -189,10 +198,10 @@ namespace deep_deep_deep
                             {
                                 case MenuStates.NewGame:
                                     GameReseted.Invoke(this, new EventArgs());
-                                    _gameState = GameState.Game;
+                                    _actualGameState = GameState.Game;
                                     break;
                                 case MenuStates.ResumeGame:
-                                    _gameState = GameState.Game;
+                                    _actualGameState = GameState.Game;
                                     break;
                                 case MenuStates.ExitGame:
                                     Exit();
@@ -211,7 +220,7 @@ namespace deep_deep_deep
             GraphicsDevice.Clear(Color.DarkGray);
             base.Draw(gameTime);
             _spriteBatch.Begin();
-            switch (_gameState)
+            switch (_actualGameState)
             {
                 case GameState.Game:
                     foreach(var o in _objects.Values)

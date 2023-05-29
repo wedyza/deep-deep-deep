@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using deep_deep_deep;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -53,7 +54,8 @@ namespace game
 
         private void ViewModelUpdate(object sender, EventArgs e)
         {
-            _gameplayModel.Update();
+            if (_gameplayView.ActualGameState == GameCycleView.GameState.Game)
+                _gameplayModel.Update();
         }
 
         public void LaunchGame()

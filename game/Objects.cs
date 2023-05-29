@@ -4,21 +4,19 @@ using System;
 
 namespace game
 {
-    class Player : IObject, ISolid
+    public class Player : IObject, ISolid
 
     {
         public ISpell QSpell;
         public ISpell WSpell;
         public ISpell ActiveSpell;
 
-        private int HP { get; set; }
+        public int HP { get; set; }
         
         public Vector2 _speed;
         public int ImageID { get; set; }
         public IGameplayModel.Direction dir { get; set; }
         public Vector2 Pos { get; private set; }
-
-        public bool Enemy { get; }
         public Vector2 Speed
         {
             get
@@ -50,7 +48,6 @@ namespace game
             dir = IGameplayModel.Direction.right;
             Pos = position;
             Collider = new RectangleCollider((int)Pos.X, (int)Pos.Y, 128, 128);
-            Enemy = false;
             IsRemoved = false;
         }
 
@@ -79,19 +76,18 @@ namespace game
         }
     }
 
-    class Door : IObject, ISolid
+    public class Door : IObject, ISolid
     {
+        public int HP { get; set; }
         public int ImageID { get; set; }
         public IGameplayModel.Direction dir { get; set; }
         public Vector2 Pos { get; }
-        public bool Enemy { get; }
         public Vector2 Speed { get; set; }
 
         public Door(Vector2 postion)
         {
             Pos = postion;
             dir = IGameplayModel.Direction.right;
-            Enemy = false;
             Collider = new RectangleCollider((int)Pos.X, (int)Pos.Y, 128, 128);
             IsRemoved = false;
         }
@@ -113,10 +109,10 @@ namespace game
 
     class Wall : IObject, ISolid
     {
+        public int HP { get; set; }
         public int ImageID { get; set;}
         public IGameplayModel.Direction dir { get; set; }
         public Vector2 Pos { get; set; }
-        public bool Enemy { get;  }
         public Vector2 Speed { get; set; }
         public RectangleCollider Collider { get; set; }
 
@@ -126,7 +122,6 @@ namespace game
             dir = IGameplayModel.Direction.right;
             Pos = position;
             Collider = new RectangleCollider((int)Pos.X, (int)Pos.Y, 128, 128);
-            Enemy = false;
         }
         public void MoveCollider(Vector2 newPos)
         {
@@ -143,25 +138,30 @@ namespace game
         public bool IsRemoved { get; set; }
     }
 
-    class Goblin : IObject, ISolid
+    class Goblin : IObject, ISolid, IEnemy
     {
-        public int HP = 100;
-
-        public ISpell attack;
-        
+        public int HP
+        {
+            get
+            {
+                return hp;
+            }
+            set
+            {
+                hp = value;
+            }
+        }
+        private int hp;
         public int ImageID { get; set; }
         public IGameplayModel.Direction dir { get; set; }
         public Vector2 Pos { get; private set; }
-        public bool Enemy { get; }
         public Vector2 Speed { get; set; }
 
         public Goblin(Vector2 position)
         {
-            HP = 100;
-            Enemy = true;
+            HP = 500;
             Pos = position;
             IsRemoved = false;
-            attack = new Attack();
             dir = IGameplayModel.Direction.right;
         }
         
@@ -170,14 +170,35 @@ namespace game
             Pos = pos;
         }
 
+        public void Follow()
+        {
+            var distance = Target.Pos - Pos;
+            var rotation = (float)Math.Atan2(distance.Y, distance.X);
+
+            var Direction = new Vector2((float)Math.Cos(rotation), (float)Math.Sin(rotation));
+            var currDistance = Vector2.Distance(Pos, Target.Pos);
+            if (currDistance > 250)
+            {
+                var t = MathHelper.Min((float)Math.Abs(currDistance - 70), 4f);
+                Speed = Direction * t;
+            }
+            else
+            {
+                Speed = new Vector2(0, 0);
+            }
+        }
+        
         public void Update()
         {
+            Follow();
             Pos += Speed;
             MoveCollider(Pos);
             if (Speed.X >= 0)
                 dir = IGameplayModel.Direction.right;
             else
                 dir = IGameplayModel.Direction.left;
+            if (HP <= 0)
+                IsRemoved = true;
         }
 
         public bool IsRemoved { get; set; }
@@ -186,5 +207,10 @@ namespace game
         {
             Collider = new RectangleCollider((int)newPos.X, (int)newPos.Y, 128, 128);
         }
+
+        public Player Target { get; set; }
+        public int Damage { get; set; }
+        public double XSpeed { get; set; }
+        public double YSpeed { get; set; }
     }
 }

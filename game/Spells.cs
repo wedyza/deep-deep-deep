@@ -12,6 +12,8 @@ public class Fire : ISpell, IObject, ISolid
     {
         return x;
     }
+
+    public int HP { get; set; }
     public int ImageID { get; set; }
     public IGameplayModel.Direction dir { get; set; }
     public Vector2 Pos { get; private set; }
@@ -38,7 +40,7 @@ public class Fire : ISpell, IObject, ISolid
         IsRemoved = false;
         _damageType = ISpell.DamageType.magical;
         ImageID = (byte)GameCycle.ObjectTypes.fire;
-        DamageDeals = 75;
+        DamageDeals = 500;
     }
 
     public object Clone()
@@ -62,6 +64,8 @@ public class Ice : ISpell, ISolid, IObject
     {
         return x;
     }
+
+    public int HP { get; set; }
     public int ImageID { get; set; }
     public IGameplayModel.Direction dir { get; set; }
     public Vector2 Pos { get; private set; }
@@ -131,6 +135,7 @@ public class Attack : ISpell, ISolid, IObject
         Collider = new RectangleCollider((int)Pos.X, (int)Pos.Y, 64, 64);
     }
 
+    public int HP { get; set; }
     public int ImageID { get; set; }
     public IGameplayModel.Direction dir { get; set; }
     public Vector2 Pos { get; private set; }

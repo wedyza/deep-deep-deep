@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using deep_deep_deep;
 using game;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,7 +15,7 @@ namespace game
 
         private int _tileSize = 128;
         private char[,] _map = new char[15, 9];
-        
+        private Dictionary<int, Vector2> collisionObjects;
         
         public int _currentID;
 
@@ -75,7 +77,7 @@ namespace game
         {
             Objects = new Dictionary<int, IObject>();
             _currentID = 1;
-            _map[5, 4] = 'P';
+            _map[6, 4] = 'P';
             _map[9, 4] = 'G';
             createWallsOnEdges();
             _map[7, 0] = 'D';
@@ -160,13 +162,16 @@ namespace game
 
         public void Update()
         {
-            for (int i = 1; i <= Objects.Keys.Count; i++)
+            /*
+            foreach (var i in Objects.Keys)
             {
                 var objInitPos = Objects[i].Pos;
+                if (Objects[i] is IEnemy e1)
+                    e1.Target = Objects[PlayerId] as Player;
                 Objects[i].Update();
                 if (Objects[i] is ISolid p1 && objInitPos != Objects[i].Pos)
                 {
-                    for (int j = 1; j <= Objects.Keys.Count; j++)
+                    foreach (var j in Objects.Keys)
                     {
                         if (i == j)
                             continue;
@@ -176,8 +181,17 @@ namespace game
                             {
                                 if (Objects[i] is ISpell)
                                 {
+                                    if (Objects[j] is IEnemy)
+                                    {
+                                        var spell = Objects[i] as ISpell;
+                                        Objects[j].HP -= spell.DamageDeals;
+                                        Debug.WriteLine("he");
+                                        if (Objects[j].IsRemoved)
+                                        {
+                                            Objects.Remove(j);
+                                        }
+                                    }
                                     Objects.Remove(i);
-                                    _currentID--;
                                     break;
                                 }
                                 var oppositeDir = Objects[i].Pos - objInitPos;
@@ -190,8 +204,25 @@ namespace game
                             break;
                     }
                 }
+            }*/
+            collisionObjects = new Dictionary<int, Vector2>();
+            foreach (var i in Objects.Keys)
+            {
+                var objInitPos = Objects[i].Pos;
+                if (Objects[i] is IEnemy e) e.Target = Objects[PlayerId] as Player;
+                Objects[i].Update();
+                collisionObjects.Add(i, objInitPos);
             }
-
+            
+            foreach (var i in collisionObjects.Keys)
+            foreach (var j in collisionObjects.Keys)
+            {
+                if (i == j) continue;
+                CalculateObstacleCollision(
+                    (collisionObjects[j], j),
+                    (collisionObjects[i], i) // ЕСЛИ СКИЛЛЫ НЕ РАБОТАЮТ, ТО ПРОБЛЕМА ТУТ!!
+                    );
+            }
             Updated.Invoke(this, new GameplayEventArgs { Objects = this.Objects });
         }
 
@@ -226,6 +257,21 @@ namespace game
                 Vector2 oppositeDir = new Vector2(0, 0);
                 while (RectangleCollider.IsCollided(p1.Collider, p2.Collider))
                 {
+                    if (Objects[obj1.id] is ISpell s1)
+                    {
+                        if (Objects[obj2.id] is IEnemy)
+                        {
+                            Objects[obj2.id].HP -= s1.DamageDeals;
+                            if (Objects[obj2.id].IsRemoved)
+                            {
+                                Objects.Remove(obj2.id);
+                                collisionObjects.Remove(obj2.id);
+                            }
+                        }
+                        Objects.Remove(obj1.id);
+                        collisionObjects.Remove(obj1.id);
+                        break;
+                    }
                     isCollided = true;
                     if (obj1.initPos != Objects[obj1.id].Pos)
                     {
@@ -241,12 +287,12 @@ namespace game
                     }
                 }
             }
-
-            if (isCollided)
-            {
-                Objects[obj1.id].Speed = new Vector2(0, 0);
-                Objects[obj2.id].Speed = new Vector2(0, 0);
-            }
+            if (Objects.ContainsKey(obj1.id) && Objects.ContainsKey(obj2.id))
+                if (isCollided)
+                {
+                    Objects[obj1.id].Speed = new Vector2(0, 0);
+                    Objects[obj2.id].Speed = new Vector2(0, 0);
+                }
         }
     }
 }
