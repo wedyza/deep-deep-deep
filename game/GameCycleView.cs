@@ -19,6 +19,7 @@ namespace deep_deep_deep
         public event EventHandler<ControlsEventArgs> PlayerMoved = delegate { };
         public event EventHandler<ControlsEventArgs> PlayerAttacked = delegate {  };
         public event EventHandler GameReseted = delegate {  };
+        public event EventHandler<SpellsEventArgs> ChangeSpell = delegate {  };
         public GameState ActualGameState 
         {
             get
@@ -58,9 +59,13 @@ namespace deep_deep_deep
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _textures.Add((byte)GameCycle.ObjectTypes.player, Content.Load<Texture2D>("wizardx4"));
+            
             _textures.Add((byte)GameCycle.ObjectTypes.wall, Content.Load<Texture2D>("wallx4"));
             _textures.Add((byte)GameCycle.ObjectTypes.door, Content.Load<Texture2D>("doorx4"));
+            
             _textures.Add((byte)GameCycle.ObjectTypes.fire, Content.Load<Texture2D>("firex2"));
+            _textures.Add((byte)GameCycle.ObjectTypes.ice, Content.Load<Texture2D>("icex2"));
+            
             _textures.Add((byte)GameCycle.ObjectTypes.goblin, Content.Load<Texture2D>("goblinx4z"));
             defaultFont = Content.Load<SpriteFont>("File");
         }
@@ -150,6 +155,18 @@ namespace deep_deep_deep
                                         new ControlsEventArgs { Direction = IGameplayModel.Direction.backward }
                                     );
                                     break;
+                                case Keys.D1:
+                                    ChangeSpell.Invoke(
+                                        this,
+                                        new SpellsEventArgs{ spell = new Fire()}
+                                        );
+                                    break;
+                                case Keys.D2:
+                                    ChangeSpell.Invoke(
+                                        this,
+                                        new SpellsEventArgs{ spell = new Ice()}
+                                        );
+                                    break;
                                 case Keys.Escape:
                                     _actualGameState = GameState.Menu;
                                     break;
@@ -220,20 +237,39 @@ namespace deep_deep_deep
             GraphicsDevice.Clear(Color.DarkGray);
             base.Draw(gameTime);
             _spriteBatch.Begin();
+            var color = Color.White;
             switch (_actualGameState)
             {
                 case GameState.Game:
                     foreach(var o in _objects.Values)
                     {
-                        GraphicsDevice.Clear(Color.DarkGray);
+                        switch (o.UnderEffect)
+                        {
+                            case ISpell.MagicType.fire:
+                                color = Color.Red;
+                                break;
+                            case ISpell.MagicType.death:
+                                color = Color.DarkOliveGreen;
+                                break;
+                            case ISpell.MagicType.ice:
+                                color = Color.DarkBlue;
+                                break;
+                            case ISpell.MagicType.light:
+                                color = Color.LightBlue;
+                                break;
+                            case ISpell.MagicType.none:
+                                color = Color.White;
+                                break;
+                        }
+                            GraphicsDevice.Clear(Color.DarkGray);
                         if (o.dir == IGameplayModel.Direction.right)
-                            _spriteBatch.Draw(_textures[o.ImageID], o.Pos, Color.White);
+                            _spriteBatch.Draw(_textures[o.ImageID], o.Pos, color);
                         else if (o.dir == IGameplayModel.Direction.left)
-                            _spriteBatch.Draw(_textures[o.ImageID], o.Pos, null, Color.White, 0, Vector2.Zero, 1f, SpriteEffects.FlipHorizontally, 0);
+                            _spriteBatch.Draw(_textures[o.ImageID], o.Pos, null, color, 0, Vector2.Zero, 1f, SpriteEffects.FlipHorizontally, 0);
                         else if (o.dir == IGameplayModel.Direction.forward)
-                            _spriteBatch.Draw(_textures[o.ImageID], o.Pos, null, Color.White, (float)-Math.PI/2f,new Vector2(64, 0), 1f, SpriteEffects.None, 0);
+                            _spriteBatch.Draw(_textures[o.ImageID], o.Pos, null, color, (float)-Math.PI/2f,new Vector2(64, 0), 1f, SpriteEffects.None, 0);
                         else if (o.dir == IGameplayModel.Direction.backward)
-                            _spriteBatch.Draw(_textures[o.ImageID], o.Pos, null, Color.White, (float)Math.PI/2f,new Vector2(0, 64), 1f, SpriteEffects.None, 0);
+                            _spriteBatch.Draw(_textures[o.ImageID], o.Pos, null, color, (float)Math.PI/2f,new Vector2(0, 64), 1f, SpriteEffects.None, 0);
                     }
                     break;
                 case GameState.Menu:

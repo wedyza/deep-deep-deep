@@ -28,10 +28,16 @@ namespace game
             _gameplayView.PlayerAttacked += ViewModelPlayerAttack;
             _gameplayModel.Updated += ModelViewUpdate;
             _gameplayView.GameReseted += ResetGame;
+            _gameplayView.ChangeSpell += ChangeSpell;
             
             _gameplayModel.Initialize();
         }
 
+        private void ChangeSpell(object sender, SpellsEventArgs e)
+        {
+            _gameplayModel.ChangeSpell(e.spell);
+        }
+        
         private void ResetGame(object sender, EventArgs e)
         {
             _gameplayModel.Initialize();

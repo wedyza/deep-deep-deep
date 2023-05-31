@@ -41,3 +41,4 @@ C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\do
 C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\firex2.xnb
 C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\goblinx4z.xnb
 C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\File.xnb
+C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\icex2.xnb

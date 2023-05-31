@@ -16,6 +16,7 @@ namespace game
         event EventHandler<ControlsEventArgs> PlayerMoved;
         event EventHandler<ControlsEventArgs> PlayerAttacked;
         event EventHandler GameReseted;
+        event EventHandler<SpellsEventArgs> ChangeSpell;
 
         GameCycleView.GameState ActualGameState { get; set; }
         
@@ -26,5 +27,10 @@ namespace game
     public class ControlsEventArgs : EventArgs
     {
         public IGameplayModel.Direction Direction { get; set; }
+    }
+
+    public class SpellsEventArgs : EventArgs
+    {
+        public ISpell spell { get; set; }
     }
 }

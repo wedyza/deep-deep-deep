@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using System.Threading;
 
 
 namespace game
@@ -7,14 +8,14 @@ namespace game
     public class Player : IObject, ISolid
 
     {
-        public ISpell QSpell;
-        public ISpell WSpell;
         public ISpell ActiveSpell;
 
         public int HP { get; set; }
         
         public Vector2 _speed;
         public int ImageID { get; set; }
+        public float SpeedMultiply { get; set; }
+        public double DamageMultiply { get; set; }
         public IGameplayModel.Direction dir { get; set; }
         public Vector2 Pos { get; private set; }
         public Vector2 Speed
@@ -39,16 +40,14 @@ namespace game
         }
         public RectangleCollider Collider { get; set; }
 
-        public Player(Vector2 position)
+        public Player()
         {
+            UnderEffect = ISpell.MagicType.none;
             HP = 100;
-            QSpell = new Fire();
-            WSpell = new Ice();
-            ActiveSpell = QSpell;
+            ActiveSpell = new Fire();
             dir = IGameplayModel.Direction.right;
-            Pos = position;
             Collider = new RectangleCollider((int)Pos.X, (int)Pos.Y, 128, 128);
-            IsRemoved = false;
+            ImageID = (byte)GameCycle.ObjectTypes.player;
         }
 
         public void Move(Vector2 pos)
@@ -68,7 +67,7 @@ namespace game
                 dir = IGameplayModel.Direction.left;
         }
 
-        public bool IsRemoved { get; set; }
+        public ISpell.MagicType UnderEffect { get; set; }
 
         public void MoveCollider(Vector2 newPos)
         {
@@ -80,16 +79,20 @@ namespace game
     {
         public int HP { get; set; }
         public int ImageID { get; set; }
+        public float SpeedMultiply { get; set; }
+        public double DamageMultiply { get; set; }
         public IGameplayModel.Direction dir { get; set; }
         public Vector2 Pos { get; }
         public Vector2 Speed { get; set; }
-
+        public int x { get; set; }
+        public int y { get; set; }
+        public IGameplayModel.Direction DoorDirection { get; set; }
         public Door(Vector2 postion)
         {
+            UnderEffect = ISpell.MagicType.none;
             Pos = postion;
             dir = IGameplayModel.Direction.right;
             Collider = new RectangleCollider((int)Pos.X, (int)Pos.Y, 128, 128);
-            IsRemoved = false;
         }
         public void Move(Vector2 pos)
         {
@@ -99,8 +102,7 @@ namespace game
         {
         }
 
-        public bool IsRemoved { get; set; }
-
+        public ISpell.MagicType UnderEffect { get; set; }
         public RectangleCollider Collider { get; set; }
         public void MoveCollider(Vector2 newPos)
         {
@@ -111,6 +113,8 @@ namespace game
     {
         public int HP { get; set; }
         public int ImageID { get; set;}
+        public float SpeedMultiply { get; set; }
+        public double DamageMultiply { get; set; }
         public IGameplayModel.Direction dir { get; set; }
         public Vector2 Pos { get; set; }
         public Vector2 Speed { get; set; }
@@ -118,7 +122,7 @@ namespace game
 
         public Wall(Vector2 position)
         {
-            IsRemoved = false;
+            UnderEffect = ISpell.MagicType.none;
             dir = IGameplayModel.Direction.right;
             Pos = position;
             Collider = new RectangleCollider((int)Pos.X, (int)Pos.Y, 128, 128);
@@ -135,7 +139,7 @@ namespace game
         {
         }
 
-        public bool IsRemoved { get; set; }
+        public ISpell.MagicType UnderEffect { get; set; }
     }
 
     class Goblin : IObject, ISolid, IEnemy
@@ -153,15 +157,46 @@ namespace game
         }
         private int hp;
         public int ImageID { get; set; }
+        public float SpeedMultiply { get; set; }
+        public double DamageMultiply { get; set; }
         public IGameplayModel.Direction dir { get; set; }
         public Vector2 Pos { get; private set; }
         public Vector2 Speed { get; set; }
 
+        void EffectCheck()
+        {
+            if (UnderEffect != ISpell.MagicType.none)
+            {
+                if (UnderEffect == ISpell.MagicType.fire)
+                {
+                    DamageMultiply = 1.07f;
+                    SpeedMultiply = 1f;
+                }
+                else if (UnderEffect == ISpell.MagicType.ice)
+                {
+                    DamageMultiply = 1f;
+                    SpeedMultiply = .7f;
+                }
+                else if (UnderEffect == ISpell.MagicType.death)
+                {
+                    SpeedMultiply = 1f;
+                    DamageMultiply = 1.4f;
+                }
+                else if (UnderEffect == ISpell.MagicType.light)
+                {
+                    SpeedMultiply = .9f;
+                    DamageMultiply = 1.15f;
+                }
+            }
+        }
+        
         public Goblin(Vector2 position)
         {
+            SpeedMultiply = 1f;
+            DamageMultiply = 1;
+            UnderEffect = ISpell.MagicType.none;
             HP = 500;
             Pos = position;
-            IsRemoved = false;
             dir = IGameplayModel.Direction.right;
         }
         
@@ -179,8 +214,8 @@ namespace game
             var currDistance = Vector2.Distance(Pos, Target.Pos);
             if (currDistance > 250)
             {
-                var t = MathHelper.Min((float)Math.Abs(currDistance - 70), 4f);
-                Speed = Direction * t;
+                var t = MathHelper.Min((float)Math.Abs(currDistance - 250), 6f);
+                Speed = Direction * t * SpeedMultiply;
             }
             else
             {
@@ -188,20 +223,21 @@ namespace game
             }
         }
         
+        
+        
         public void Update()
         {
             Follow();
             Pos += Speed;
             MoveCollider(Pos);
+            EffectCheck();
             if (Speed.X >= 0)
                 dir = IGameplayModel.Direction.right;
             else
                 dir = IGameplayModel.Direction.left;
-            if (HP <= 0)
-                IsRemoved = true;
         }
 
-        public bool IsRemoved { get; set; }
+        public ISpell.MagicType UnderEffect { get; set; }
         public RectangleCollider Collider { get; set; }
         public void MoveCollider(Vector2 newPos)
         {
@@ -210,7 +246,5 @@ namespace game
 
         public Player Target { get; set; }
         public int Damage { get; set; }
-        public double XSpeed { get; set; }
-        public double YSpeed { get; set; }
     }
 }

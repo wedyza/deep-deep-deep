@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
+using System.Threading;
 
 namespace game
 {
@@ -11,6 +11,8 @@ namespace game
         int HP { get; set; }
         
         int ImageID { get; set; }
+        float SpeedMultiply { get; set; }
+        double DamageMultiply { get; set; }
 
         IGameplayModel.Direction dir { get; set; }
 
@@ -22,6 +24,6 @@ namespace game
 
         void Update();
         
-        bool IsRemoved { get; set; }
+        ISpell.MagicType UnderEffect { get; set; }
     }
 }

@@ -14,11 +14,16 @@ namespace game
         public event EventHandler<GameplayEventArgs> Updated = delegate { };
 
         private int _tileSize = 128;
-        private char[,] _map = new char[15, 9];
+        private Dictionary<(int, int), IRooms> MapComposition;
+        private int XMap = 0;
+        private int YMap = 0;
         private Dictionary<int, Vector2> collisionObjects;
-        
+        private Room ActualRoom;
+        private Player Player;
+        private int RoomCounter;
         public int _currentID;
-
+        private IObject PlayerContainer;
+        
         public int PlayerId { get; set; }
         public Dictionary<int, IObject> Objects { get; set; }
 
@@ -29,13 +34,11 @@ namespace game
             door,
             fire,
             ice,
-            arrow,
-            fire_arrow,
-            attack,
-            long_attack, 
+            undead,
+            light,
             goblin, 
             skeleton,
-            gremyt
+            book
         }
 
 
@@ -69,35 +72,55 @@ namespace game
             _currentID++;
         }
 
+        public void ChangeSpell(ISpell spell)
+        {
+            var p = Objects[PlayerId] as Player;
+            p.ActiveSpell = spell;
+        }
+
         public void ResetGame()
         {
         }
 
         public void Initialize()
         {
-            Objects = new Dictionary<int, IObject>();
-            _currentID = 1;
-            _map[6, 4] = 'P';
-            _map[9, 4] = 'G';
-            createWallsOnEdges();
-            _map[7, 0] = 'D';
-            bool isPlacedPlayer = false;
-            for (int y = 0; y < _map.GetLength(1); y++)
-                for (int x = 0; x < _map.GetLength(0); x++)
-                {
-                    if (_map[x, y] != '\0')
-                    {
-                        IObject generatedObject = GenerateObject(_map[x, y], x, y);
-                        if (_map[x, y] == 'P' && !isPlacedPlayer)
-                        {
-                            PlayerId = _currentID;
-                            isPlacedPlayer = true;
-                        }
+            RoomCounter = 0;
+            Player = new Player();
+            MapComposition = new Dictionary<(int, int), IRooms>();
+            ActualRoom = new Room(Room.RoomType.StartRoom, IGameplayModel.Direction.none, (true, true, true, true));
+            MapComposition.Add((XMap, YMap), ActualRoom);
+            ActualRoom.IsCleared = true;
+            RoomInitialize(ActualRoom);
+        }
 
-                        Objects.Add(_currentID, generatedObject);
+        public void RoomInitialize(Room room)
+        {
+            _currentID = 0;
+            bool isPlacedPlayer = false;
+            room.PlacePlayer();
+            
+            Objects = new Dictionary<int, IObject>();
+            for (int y = 0; y < room.Map.GetLength(1); y++)
+            for (int x = 0; x < room.Map.GetLength(0); x++)
+            {
+                if (room.Map[x, y] != '\0')
+                {
+                    IObject generatedObject = GenerateObject(room.Map[x, y], x, y);
+                    if (room.IsCleared && room.Map[x, y] == 'G')
+                        break;
+                    if (room.Map[x, y] == 'P' && !isPlacedPlayer)
+                    {
+                        PlayerId = _currentID;
+                        isPlacedPlayer = true;
+                        PlayerContainer = generatedObject;
                         _currentID++;
+                        continue;
                     }
+                    Objects.Add(_currentID, generatedObject);
+                    _currentID++;
                 }
+            }
+            Objects.Add(PlayerId, PlayerContainer);
         }
 
         private Goblin CreateGoblin(float x, float y, ObjectTypes spriteId)
@@ -111,14 +134,22 @@ namespace game
         {
             Door obj = new Door(new Vector2(x, y));
             obj.ImageID = (byte)spriteId;
+            obj.DoorDirection = x == 0 ? IGameplayModel.Direction.left :
+                y == 0 ? IGameplayModel.Direction.forward :
+                y / _tileSize < 7 ? IGameplayModel.Direction.right :
+                IGameplayModel.Direction.backward;
+            obj.x = obj.DoorDirection == IGameplayModel.Direction.left ? -1 :
+                obj.DoorDirection == IGameplayModel.Direction.right ? 1 : 0;
+            obj.y = obj.DoorDirection == IGameplayModel.Direction.backward ? -1 :
+                IGameplayModel.Direction.forward == obj.DoorDirection ? 1 : 0;
             return obj;
         }
 
-        private Player CreateNPC(float x, float y, ObjectTypes spriteId, Vector2 speed)
+        private Player CreateNPC(float x, float y, Vector2 speed)
         {
-            Player obj = new Player(new Vector2(x, y));
-            obj.ImageID = (byte)spriteId;
+            var obj = Player;
             obj.Speed = speed;
+            obj.Move(new Vector2(x, y));
             return obj;
         }
         
@@ -134,8 +165,8 @@ namespace game
             float x = xTile * _tileSize;
             float y = yTile * _tileSize;
             IObject generatedObject = null;
-            if (sign == 'O' || sign == 'P')
-                generatedObject = CreateNPC(x, y, ObjectTypes.player, new Vector2(0, 0));
+            if (sign == 'P')
+                generatedObject = CreateNPC(x, y, new Vector2(0, 0));
             else if (sign == 'W')
                 generatedObject = CreateWall(x, y, ObjectTypes.wall);
             else if (sign == 'D')
@@ -145,66 +176,8 @@ namespace game
             return generatedObject;
         }
 
-        public void createWallsOnEdges()
-        {
-            for (int x = 0; x < _map.GetLength(0); x++)
-            {
-                _map[x, 0] = 'W';
-                _map[x, _map.GetLength(1) - 1] = 'W';
-            }
-
-            for (int y = 1; y < _map.GetLength(1); y++)
-            {
-                _map[0, y] = 'W';
-                _map[_map.GetLength(0) - 1, y] = 'W';
-            }
-        }
-
         public void Update()
         {
-            /*
-            foreach (var i in Objects.Keys)
-            {
-                var objInitPos = Objects[i].Pos;
-                if (Objects[i] is IEnemy e1)
-                    e1.Target = Objects[PlayerId] as Player;
-                Objects[i].Update();
-                if (Objects[i] is ISolid p1 && objInitPos != Objects[i].Pos)
-                {
-                    foreach (var j in Objects.Keys)
-                    {
-                        if (i == j)
-                            continue;
-                        if (Objects[j] is ISolid p2)
-                        {
-                            while (RectangleCollider.IsCollided(p1.Collider, p2.Collider))
-                            {
-                                if (Objects[i] is ISpell)
-                                {
-                                    if (Objects[j] is IEnemy)
-                                    {
-                                        var spell = Objects[i] as ISpell;
-                                        Objects[j].HP -= spell.DamageDeals;
-                                        Debug.WriteLine("he");
-                                        if (Objects[j].IsRemoved)
-                                        {
-                                            Objects.Remove(j);
-                                        }
-                                    }
-                                    Objects.Remove(i);
-                                    break;
-                                }
-                                var oppositeDir = Objects[i].Pos - objInitPos;
-                                oppositeDir.Normalize();
-                                Objects[i].Move(Objects[i].Pos - oppositeDir);
-                            }
-                        }
-
-                        if (!Objects.ContainsKey(i))
-                            break;
-                    }
-                }
-            }*/
             collisionObjects = new Dictionary<int, Vector2>();
             foreach (var i in Objects.Keys)
             {
@@ -215,14 +188,14 @@ namespace game
             }
             
             foreach (var i in collisionObjects.Keys)
-            foreach (var j in collisionObjects.Keys)
-            {
-                if (i == j) continue;
-                CalculateObstacleCollision(
-                    (collisionObjects[j], j),
-                    (collisionObjects[i], i) // ЕСЛИ СКИЛЛЫ НЕ РАБОТАЮТ, ТО ПРОБЛЕМА ТУТ!!
-                    );
-            }
+                foreach (var j in collisionObjects.Keys)
+                {
+                    if (i != j) 
+                        CalculateObstacleCollision(
+                            (collisionObjects[j], j),
+                            (collisionObjects[i], i) // ЕСЛИ СКИЛЛЫ НЕ РАБОТАЮТ, ТО ПРОБЛЕМА ТУТ!!
+                            );
+                }
             Updated.Invoke(this, new GameplayEventArgs { Objects = this.Objects });
         }
 
@@ -251,6 +224,7 @@ namespace game
             (Vector2 initPos, int id) obj2
         )
         {
+            var rand = new Random();
             bool isCollided = false;
             if (Objects[obj1.id] is ISolid p1 && Objects[obj2.id] is ISolid p2)
             {
@@ -261,8 +235,9 @@ namespace game
                     {
                         if (Objects[obj2.id] is IEnemy)
                         {
-                            Objects[obj2.id].HP -= s1.DamageDeals;
-                            if (Objects[obj2.id].IsRemoved)
+                            Objects[obj2.id].UnderEffect = s1._magicType;
+                            Objects[obj2.id].HP -= (int)(s1.DamageDeals * Objects[obj2.id].DamageMultiply);
+                            if (Objects[obj2.id].HP <= 0)
                             {
                                 Objects.Remove(obj2.id);
                                 collisionObjects.Remove(obj2.id);
@@ -271,6 +246,36 @@ namespace game
                         Objects.Remove(obj1.id);
                         collisionObjects.Remove(obj1.id);
                         break;
+                    }
+                    if (Objects[obj2.id] is Door d)
+                    {
+                        if (Objects[obj1.id] is Player)
+                        {
+                            if (ActualRoom.IsCleared)
+                            {
+                                XMap += d.x;
+                                YMap += d.y;
+                                if (MapComposition.ContainsKey((XMap, YMap)))
+                                {
+                                    ActualRoom = MapComposition[(XMap, YMap)] as Room;
+                                    ActualRoom.dir = d.DoorDirection;
+                                    RoomInitialize(ActualRoom);
+                                }
+                                else
+                                {
+                                    var left = CalculateSides(-1, 0);
+                                    var right = CalculateSides(1, 0);
+                                    var forward = CalculateSides(0, 1);
+                                    var backward = CalculateSides(0, -1);
+                                    var roomType = 
+                                    ActualRoom = new Room(Room.RoomType.Killing, d.DoorDirection, (left, forward, right, backward));
+                                    ActualRoom.IsCleared = true;
+                                    MapComposition.Add((XMap, YMap), ActualRoom);
+                                    RoomInitialize(ActualRoom);
+                                }
+                                break;
+                            }
+                        }
                     }
                     isCollided = true;
                     if (obj1.initPos != Objects[obj1.id].Pos)
@@ -293,6 +298,28 @@ namespace game
                     Objects[obj1.id].Speed = new Vector2(0, 0);
                     Objects[obj2.id].Speed = new Vector2(0, 0);
                 }
+        }
+
+        public bool CalculateSides(int d1, int d2)
+        {
+            var rand = new Random();
+            bool side;
+            if (MapComposition.ContainsKey((XMap + d1, YMap + d2)))
+                side = MapComposition[(XMap + d1, YMap + d2)] is Room;
+            else
+            {
+                side  = rand.Next(2) == 1;
+                if (!side)
+                    MapComposition.Add((XMap + d1, YMap + d2), new Nothing());
+            }
+
+            return side;
+        }
+
+        public Room.RoomType GenerateRoomType()
+        {
+            var rand = new Random();
+            var types = new Room.RoomType[] { Room.RoomType.Killing, Room.RoomType.Looting };
         }
     }
 }

@@ -8,10 +8,12 @@
     <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/File.spritefont</File>
     <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/firex2.png</File>
     <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/goblinx4z.png</File>
+    <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/icex2.png</File>
     <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/wallx4.png</File>
     <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/wizardx4.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

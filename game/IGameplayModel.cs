@@ -16,6 +16,7 @@ namespace game
         void Update();
         void MovePlayer(Direction dir);
         void PlayerAttack(Direction dir);
+        void ChangeSpell(ISpell spell);
         void ResetGame();
         void Initialize();
 
@@ -24,7 +25,8 @@ namespace game
             forward,
             backward,
             right,
-            left
+            left,
+            none
         }
     }
 

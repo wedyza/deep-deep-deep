@@ -7,15 +7,16 @@ namespace game;
 
 public interface ISpell : ICloneable
 {
-    public enum DamageType
+    public enum MagicType
     {
-        physical,
-        magical
+        fire,
+        ice,
+        death,
+        light,
+        none
     }
 
-    DamageType _damageType { get; set; }
+    MagicType _magicType { get; set; }
     
     int DamageDeals { get; set; }
-
-    T SpecialEffect<T>(T x);
 }

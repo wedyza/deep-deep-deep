@@ -56,6 +56,18 @@
 /processorParam:TextureFormat=Color
 /build:goblinx4z.png
 
+#begin icex2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:icex2.png
+
 #begin wallx4.png
 /importer:TextureImporter
 /processor:TextureProcessor

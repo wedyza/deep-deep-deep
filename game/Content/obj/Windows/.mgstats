@@ -1,1 +1,3 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"C:/Users/wedyzza/Desktop/deep deep deep/game/Content/File.spritefont","C:/Users/wedyzza/Desktop/deep deep deep/game/Content/bin/Windows/File.xnb","FontDescriptionProcessor","SpriteFontContent",2068,70687,0,2490604
+"C:/Users/wedyzza/Desktop/deep deep deep/game/Content/icex2.png","C:/Users/wedyzza/Desktop/deep deep deep/game/Content/bin/Windows/icex2.xnb","TextureProcessor","Texture2DContent",776,16469,0,0212271
