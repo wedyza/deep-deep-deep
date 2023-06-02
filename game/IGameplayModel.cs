@@ -16,7 +16,7 @@ namespace game
         void Update();
         void MovePlayer(Direction dir);
         void PlayerAttack(Direction dir);
-        void ChangeSpell(ISpell spell);
+        void ChangeSpell(int id);
         void ResetGame();
         void Initialize();
 
@@ -34,5 +34,6 @@ namespace game
     public class GameplayEventArgs : EventArgs
     {
         public Dictionary<int, IObject> Objects { get; set; }
+        public Dictionary<(int, int), IRooms> Rooms { get; set; }
     }
 }

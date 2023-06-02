@@ -1,4 +1,7 @@
-﻿namespace game;
+﻿using System;
+using Microsoft.Xna.Framework;
+
+namespace game;
 
 public interface IRooms
 {
@@ -13,10 +16,11 @@ public class Nothing : IRooms
 public class Room : IRooms
 {
     public char[,] Map;
-    public bool IsCleared;
     public RoomType roomType;
     public IGameplayModel.Direction dir;
-    public (int x, int y) OldEnter = (4, 7);
+    public (int x, int y) OldEnter = (7, 4);
+    public int EnemiesInside;
+    public bool PlayerInside;
     public enum RoomType
     {
         Looting,
@@ -30,12 +34,7 @@ public class Room : IRooms
         dir = DoorDirection;
         roomType = _roomType;
         Map = new char[15, 9];
-        IsCleared = false;
-        if (roomType == RoomType.StartRoom)
-        {
-            roomDoors.backward = false;
-            dir = IGameplayModel.Direction.forward;
-        }
+        RoomPresets();
         createWallsOnEdges();
         CreateDoors(roomDoors);
     }
@@ -60,6 +59,10 @@ public class Room : IRooms
             case IGameplayModel.Direction.forward:
                 Map[7, 7] = 'P';
                 OldEnter = (7, 7);
+                break;
+            case IGameplayModel.Direction.none:
+                Map[7, 4] = 'P';
+                OldEnter = (7, 4);
                 break;
         }
     }
@@ -90,4 +93,76 @@ public class Room : IRooms
             Map[Map.GetLength(0) - 1, y] = 'W';
         }
     }
+
+    public void RoomPresets()
+    {
+        if (roomType == RoomType.StartRoom)
+        {
+            PlayerInside = true;
+            EnemiesInside = 0;
+            Map[1, 1] = 'T';
+        }
+        else if (roomType == RoomType.Looting)
+        {
+            EnemiesInside = 1;
+            Map[6, 6] = 'A';
+        }
+        else if (roomType == RoomType.Killing)
+        {
+            var s = new Random();
+            int n = s.Next(3);
+            switch (n)
+            {
+                case 0:
+                    Map[5, 3] = 'G';
+                    Map[8, 4] = 'G';
+                    EnemiesInside = 2;
+                    break;
+                case 1:
+                    Map[7, 5] = 'G';
+                    Map[10, 6] = 'G';
+                    Map[8, 4] = 'G';
+                    EnemiesInside = 3;
+                    break;
+                case 2:
+                    Map[8, 4] = 'G';
+                    Map[10, 7] = 'G';
+                    EnemiesInside = 2;
+                    break;
+            }
+        }
+        else if (roomType == RoomType.Boss)
+        {
+            Map[8, 4] = 'B';
+            EnemiesInside = 2;
+        }
+    }
+}
+
+public class Tutorial : IObject
+{
+    public int HP { get; set; }
+    public int ImageID { get; set; }
+    public float SpeedMultiply { get; set; }
+    public double DamageMultiply { get; set; }
+    public IGameplayModel.Direction dir { get; set; }
+    public Vector2 Pos { get; }
+    public Vector2 Speed { get; set; }
+    public void Move(Vector2 pos)
+    {
+    }
+
+    public Tutorial(Vector2 Pos)
+    {
+        this.Pos = Pos;
+        dir = IGameplayModel.Direction.right;
+        ImageID = (byte)GameCycle.ObjectTypes.tutorial;
+    }
+    
+    public void Update()
+    {
+    }
+
+    public bool IsRemoved { get; set; }
+    public ISpell.MagicType UnderEffect { get; set; }
 }

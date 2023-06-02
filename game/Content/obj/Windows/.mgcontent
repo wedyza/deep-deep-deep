@@ -4,15 +4,45 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
+    <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/../../../../OneDrive - УрФУ/png/clawx2.png</File>
+    <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/bootsx2.png</File>
+    <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/bossx6.png</File>
+    <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/canex2.png</File>
+    <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/clawx2.png</File>
     <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/doorx4.png</File>
     <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/File.spritefont</File>
     <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/firex2.png</File>
     <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/goblinx4z.png</File>
+    <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/grayBox.png</File>
+    <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/greenBox.png</File>
     <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/icex2.png</File>
+    <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/kniggerx2.png</File>
+    <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/lightingx2.png</File>
+    <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/lightingx4.png</File>
+    <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/taprootx2.png</File>
+    <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/tutorial.png</File>
+    <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/undeadx2.png</File>
+    <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/undeadx4.png</File>
     <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/wallx4.png</File>
     <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/wizardx4.png</File>
+    <File>C:/Users/wedyzza/Desktop/deep deep deep/game/Content/yellowBox.png</File>
   </SourceFiles>
   <DestFiles>
+    <File>clawx2.png</File>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

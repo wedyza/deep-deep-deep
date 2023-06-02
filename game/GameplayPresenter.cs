@@ -35,7 +35,7 @@ namespace game
 
         private void ChangeSpell(object sender, SpellsEventArgs e)
         {
-            _gameplayModel.ChangeSpell(e.spell);
+            _gameplayModel.ChangeSpell(e.id);
         }
         
         private void ResetGame(object sender, EventArgs e)
@@ -55,7 +55,7 @@ namespace game
 
         private void ModelViewUpdate(object sender, GameplayEventArgs e)
         {
-            _gameplayView.LoadGameCycleParameters(e.Objects);
+            _gameplayView.LoadGameCycleParameters(e.Objects, e.Rooms);
         }
 
         private void ViewModelUpdate(object sender, EventArgs e)

@@ -42,3 +42,17 @@ C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\fi
 C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\goblinx4z.xnb
 C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\File.xnb
 C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\icex2.xnb
+C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\bootsx2.xnb
+C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\canex2.xnb
+C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\clawx2.xnb
+C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\kniggerx2.xnb
+C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\lightingx2.xnb
+C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\taprootx2.xnb
+C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\undeadx2.xnb
+C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\bossx6.xnb
+C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\lightingx4.xnb
+C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\undeadx4.xnb
+C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\grayBox.xnb
+C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\greenBox.xnb
+C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\yellowBox.xnb
+C:\Users\wedyzza\Desktop\deep deep deep\game\bin\Debug\net6.0-windows\Content\tutorial.xnb

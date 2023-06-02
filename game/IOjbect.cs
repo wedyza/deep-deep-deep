@@ -24,6 +24,8 @@ namespace game
 
         void Update();
         
+        bool IsRemoved { get; set; }
+        
         ISpell.MagicType UnderEffect { get; set; }
     }
 }

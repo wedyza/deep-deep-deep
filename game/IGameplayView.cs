@@ -20,7 +20,7 @@ namespace game
 
         GameCycleView.GameState ActualGameState { get; set; }
         
-        void LoadGameCycleParameters(Dictionary<int, IObject> objects);
+        void LoadGameCycleParameters(Dictionary<int, IObject> objects, Dictionary<(int, int), IRooms> rooms);
         void Run();
     }
 
@@ -31,6 +31,6 @@ namespace game
 
     public class SpellsEventArgs : EventArgs
     {
-        public ISpell spell { get; set; }
+        public int id { get; set; }
     }
 }

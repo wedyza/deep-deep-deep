@@ -1,3 +1,7 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"C:/Users/wedyzza/Desktop/deep deep deep/game/Content/File.spritefont","C:/Users/wedyzza/Desktop/deep deep deep/game/Content/bin/Windows/File.xnb","FontDescriptionProcessor","SpriteFontContent",2068,70687,0,2490604
-"C:/Users/wedyzza/Desktop/deep deep deep/game/Content/icex2.png","C:/Users/wedyzza/Desktop/deep deep deep/game/Content/bin/Windows/icex2.xnb","TextureProcessor","Texture2DContent",776,16469,0,0212271
+"C:/Users/wedyzza/Desktop/deep deep deep/game/Content/../../../../OneDrive - УрФУ/png/clawx2.png","C:/Users/wedyzza/Desktop/deep deep deep/game/Content/bin/Windows/clawx2.xnb","TextureProcessor","Texture2DContent",919,16469,0,1146978
+"C:/Users/wedyzza/Desktop/deep deep deep/game/Content/clawx2.png","C:/Users/wedyzza/Desktop/deep deep deep/game/Content/bin/Windows/clawx2.xnb","TextureProcessor","Texture2DContent",919,16469,0,0019857
+"C:/Users/wedyzza/Desktop/deep deep deep/game/Content/grayBox.png","C:/Users/wedyzza/Desktop/deep deep deep/game/Content/bin/Windows/grayBox.xnb","TextureProcessor","Texture2DContent",157,4181,0,0021749
+"C:/Users/wedyzza/Desktop/deep deep deep/game/Content/greenBox.png","C:/Users/wedyzza/Desktop/deep deep deep/game/Content/bin/Windows/greenBox.xnb","TextureProcessor","Texture2DContent",161,4181,0,0019034
+"C:/Users/wedyzza/Desktop/deep deep deep/game/Content/tutorial.png","C:/Users/wedyzza/Desktop/deep deep deep/game/Content/bin/Windows/tutorial.xnb","TextureProcessor","Texture2DContent",162219,5963861,0,1451118
+"C:/Users/wedyzza/Desktop/deep deep deep/game/Content/yellowBox.png","C:/Users/wedyzza/Desktop/deep deep deep/game/Content/bin/Windows/yellowBox.xnb","TextureProcessor","Texture2DContent",159,4181,0,0014965
