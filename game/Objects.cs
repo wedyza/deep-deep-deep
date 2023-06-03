@@ -12,7 +12,7 @@ namespace game
         public List<ISpell> Spells;
         public int HP { get; set; }
         
-        public Vector2 _speed;
+        private Vector2 _speed;
         public int ImageID { get; set; }
         public float SpeedMultiply { get; set; }
         public double DamageMultiply { get; set; }
@@ -210,7 +210,7 @@ namespace game
             Pos = pos;
         }
 
-        public void Follow()
+        private void Follow()
         {
             var distance = Target.Pos - Pos;
             var rotation = (float)Math.Atan2(distance.Y, distance.X);
@@ -229,7 +229,7 @@ namespace game
             }
         }
 
-        public void DAMAGEDEAL()
+        private void DAMAGEDEAL()
         {
             var aTimer = new Timer();
             aTimer.Interval = 1000;
@@ -291,8 +291,18 @@ namespace game
             }
             else
             {
+                DAMAGEDEAL();
                 Speed = new Vector2(0, 0);
             }
+        }
+        
+        private void DAMAGEDEAL()
+        {
+            var aTimer = new Timer();
+            aTimer.Interval = 1000;
+            aTimer.Elapsed += (sender, args) => Target.HP -= 2;
+            aTimer.AutoReset = false;
+            aTimer.Enabled = true;
         }
         
         public void Move(Vector2 pos)
@@ -315,7 +325,7 @@ namespace game
 
         public bool IsRemoved { get; set; }
 
-        void GenerateRandomArtefact()
+        private void GenerateRandomArtefact()
         {
             var rand = new Random();
             int num = rand.Next(4);

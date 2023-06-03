@@ -21,12 +21,12 @@ namespace game
         private Room ActualRoom;
         private Player Player;
         private int RoomCounter;
-        public int _currentID;
+        private int _currentID;
         private IObject PlayerContainer;
         private int BossEncounter;
         private int LootingEncounter;
 
-        public int PlayerId { get; set; }
+        public int PlayerId { get;  set; }
         public Dictionary<int, IObject> Objects { get; set; }
 
         public enum ObjectTypes : byte
@@ -51,7 +51,7 @@ namespace game
 
         public void PlayerAttack(IGameplayModel.Direction dir)
         {
-            Player p = (Player)Objects[PlayerId];
+            var p = (Player)Objects[PlayerId];
             var spell = p.ActiveSpell.Clone() as IObject;
             if (p.ActiveSpell._castType == ISpell.CastType.projectTile)
             {
@@ -123,7 +123,7 @@ namespace game
             RoomInitialize(ActualRoom);
         }
 
-        public void RoomInitialize(Room room)
+        private void RoomInitialize(Room room)
         {
             _currentID = 0;
             bool isPlacedPlayer = false;
@@ -271,8 +271,8 @@ namespace game
                 {
                     if (i != j) 
                         CalculateObstacleCollision(
-                            (collisionObjects[j], j), // hi hi // ha ha // that code // isn't working //
-                            (collisionObjects[i], i) // ЕСЛИ СКИЛЛЫ НЕ РАБОТАЮТ, ТО ПРОБЛЕМА ТУТ!! надо что-то придумать с кастом
+                            (collisionObjects[j], j),
+                            (collisionObjects[i], i) 
                             );
                 }
             Updated.Invoke(this, new GameplayEventArgs { Objects = this.Objects, Rooms = this.MapComposition});
@@ -308,7 +308,6 @@ namespace game
             bool isCollided = false;
             if (Objects[obj1.id] is ISolid p1 && Objects[obj2.id] is ISolid p2)
             {
-                Vector2 oppositeDir = new Vector2(0, 0);
                 while (RectangleCollider.IsCollided(p1.Collider, p2.Collider))
                 {
                     if (Objects[obj1.id] is ISpell s1)
@@ -387,17 +386,9 @@ namespace game
                     
                     isCollided = true;
                     if (obj1.initPos != Objects[obj1.id].Pos)
-                    {
-                        oppositeDir = Objects[obj1.id].Pos - obj1.initPos;
-                        oppositeDir.Normalize();
-                        Objects[obj1.id].Move(Objects[obj1.id].Pos - oppositeDir);
-                    }
+                        CollisionBackups(obj1.id, obj1.initPos);
                     if (obj2.initPos != Objects[obj2.id].Pos)
-                    {
-                        oppositeDir = Objects[obj2.id].Pos - obj2.initPos;
-                        oppositeDir.Normalize();
-                        Objects[obj2.id].Move(Objects[obj2.id].Pos - oppositeDir);
-                    }
+                        CollisionBackups(obj2.id, obj2.initPos);
                 }
             }
             if (!Objects[obj1.id].IsRemoved && !Objects[obj2.id].IsRemoved)
@@ -408,7 +399,7 @@ namespace game
                 }
         }
 
-        public bool CalculateSides(int d1, int d2)
+        private bool CalculateSides(int d1, int d2)
         {
             var rand = new Random();
             bool side;
@@ -424,7 +415,7 @@ namespace game
             return side;
         }
 
-        public bool ArtefactCollecting(int id1, int id2)
+        private bool ArtefactCollecting(int id1, int id2)
         {
             if (Objects[id1] is IArtefact a)
             { 
@@ -477,13 +468,21 @@ namespace game
             return false;
         }
 
-        public void SpellStacking(int id, ISpell spell)
+        private void SpellStacking(int id, ISpell spell)
         {
             var p = Objects[PlayerId] as Player;
             if (id != -1)
                 p.Spells[id].DamageDeals = (int)(p.Spells[id].DamageDeals * 1.15f);
             else
                 p.Spells.Add(spell);
+        }
+
+        private void CollisionBackups(int id, Vector2 pos)
+        {
+            Vector2 oppositeDir = new Vector2(0, 0);
+            oppositeDir = Objects[id].Pos - pos;
+            oppositeDir.Normalize();
+            Objects[id].Move(Objects[id].Pos - oppositeDir);
         }
     }
 }

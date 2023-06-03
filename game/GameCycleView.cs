@@ -56,6 +56,7 @@ namespace deep_deep_deep
             _actualGameState = GameState.Menu;
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1080;
+            _graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
         }
 
@@ -111,9 +112,9 @@ namespace deep_deep_deep
             Map
         }
 
-        public int _menuCounter = 1;
-        public MenuStates option = MenuStates.NewGame;
-        public int MenuCounter
+        private int _menuCounter = 1;
+        private MenuStates _option = MenuStates.NewGame;
+        private int MenuCounter
         {
             get
             {
@@ -129,11 +130,11 @@ namespace deep_deep_deep
                     _menuCounter = value;
 
                 if (_menuCounter == 1)
-                    option = MenuStates.NewGame;
+                    _option = MenuStates.NewGame;
                 else if (_menuCounter == 2)
-                    option = MenuStates.ResumeGame;
+                    _option = MenuStates.ResumeGame;
                 else if (_menuCounter == 3)
-                    option = MenuStates.ExitGame;
+                    _option = MenuStates.ExitGame;
             }
         }
 
@@ -246,7 +247,7 @@ namespace deep_deep_deep
                             MenuCounter--;
                         else if (_currentKey.IsKeyDown(Keys.Enter) && _previousKey.IsKeyUp(Keys.Enter))
                         {
-                            switch (option)
+                            switch (_option)
                             {
                                 case MenuStates.NewGame:
                                     GameReseted.Invoke(this, new EventArgs());
@@ -354,17 +355,17 @@ namespace deep_deep_deep
                         defaultFont,
                         "New game",
                         new Vector2(_graphics.PreferredBackBufferWidth * 0.45f, _graphics.PreferredBackBufferHeight * 0.4f),
-                        option == MenuStates.NewGame ? Color.Black : Color.White);
+                        _option == MenuStates.NewGame ? Color.Black : Color.White);
                     _spriteBatch.DrawString(
                         defaultFont,
                         "Resume game",
                         new Vector2(_graphics.PreferredBackBufferWidth * 0.45f, _graphics.PreferredBackBufferHeight * 0.5f),
-                        option == MenuStates.ResumeGame ? Color.Black : Color.White);
+                        _option == MenuStates.ResumeGame ? Color.Black : Color.White);
                     _spriteBatch.DrawString(
                         defaultFont,
                         "Exit game",
                         new Vector2(_graphics.PreferredBackBufferWidth * 0.45f, _graphics.PreferredBackBufferHeight * 0.6f),
-                        option == MenuStates.ExitGame ? Color.Black : Color.White);
+                        _option == MenuStates.ExitGame ? Color.Black : Color.White);
                     break;
                 case GameState.Map:
                     GraphicsDevice.Clear(Color.DarkBlue);
